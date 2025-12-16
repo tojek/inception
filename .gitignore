@@ -1,0 +1,7 @@
+srcs/.env
+.DS_Store
+*.swp
+*.swo
+*~
+*.key
+*.crt
