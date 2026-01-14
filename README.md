@@ -11,8 +11,14 @@ A Docker-based infrastructure with NGINX, WordPress, and MariaDB running in sepa
 ### Setup
 
 1. Add to `/etc/hosts`: `127.0.0.1 mwojtcza.42.fr`
-2. Copy environment file: `cp srcs/.env.example srcs/.env`
-3. Edit `srcs/.env` with your credentials
+2. Create secret files:
+   ```bash
+   cp secrets/db_root_password.txt.example secrets/db_root_password.txt
+   cp secrets/db_password.txt.example secrets/db_password.txt
+   cp secrets/wp_admin_password.txt.example secrets/wp_admin_password.txt
+   cp secrets/wp_user_password.txt.example secrets/wp_user_password.txt
+   ```
+3. Edit each secret file with strong passwords
 4. Run: `make`
 
 ### Access
@@ -44,7 +50,8 @@ A Docker-based infrastructure with NGINX, WordPress, and MariaDB running in sepa
 
 **Secrets vs Environment Variables**
 - Env vars: Simple, visible in inspect
-- Secrets: Encrypted, secure storage
+- Secrets: Encrypted, secure storage, mounted as files
+- Implementation: Using Docker secrets for passwords
 
 **Docker Network vs Host Network**
 - Docker Network: Isolated, service discovery
@@ -59,10 +66,12 @@ A Docker-based infrastructure with NGINX, WordPress, and MariaDB running in sepa
 - Base: Debian Bullseye (stable, compatible)
 - Network: Bridge network with DNS resolution
 - Data: Persisted in `/home/${USER}/data/`
-- Security: SSL/TLS, no passwords in files, .env gitignored
+- Security: SSL/TLS, Docker secrets for passwords, secrets/ gitignored
 
 ## Resources
 
-- [Docker Docs](https://docs.docker.com/) | [Compose](https://docs.docker.com/compose/)
+- [Docker Docs](https://docs.docker.com/) | [Compose](https://docs.docker.com/compose/) | [Secrets](https://docs.docker.com/engine/swarm/secrets/)
 - [NGINX](https://nginx.org/en/docs/) | [WordPress](https://wordpress.org/documentation/) | [MariaDB](https://mariadb.com/kb/)
+
+**AI Usage**: GitHub Copilot assisted with Docker Compose syntax, Docker secrets configuration, shell script debugging, SSL certificate generation, and configuration review.
 

@@ -1,7 +1,13 @@
-srcs/.env
+# Secret files
+secrets/*.txt
+*.env
+
+# Editor files
 .DS_Store
 *.swp
 *.swo
 *~
+
+# SSL certificates
 *.key
 *.crt

@@ -12,8 +12,11 @@ sudo apt install docker-compose -y
 
 # Setup project
 git clone <repository-url> && cd inception
-cp srcs/.env.example srcs/.env
-nano srcs/.env  # Configure credentials
+for f in secrets/*.example; do cp "$f" "${f%.example}"; done
+nano secrets/db_root_password.txt  # Add strong password
+nano secrets/db_password.txt
+nano secrets/wp_admin_password.txt
+nano secrets/wp_user_password.txt
 echo "127.0.0.1 mwojtcza.42.fr" | sudo tee -a /etc/hosts
 ```
 
@@ -22,13 +25,17 @@ echo "127.0.0.1 mwojtcza.42.fr" | sudo tee -a /etc/hosts
 ```
 inception/
 ├── Makefile
-├── srcs/
-│   ├── .env (gitignored)
-│   ├── docker-compose.yml
-│   └── requirements/
-│       ├── nginx/     (Dockerfile, conf/, tools/)
-│       ├── wordpress/ (Dockerfile, conf/, tools/)
-│       └── mariadb/   (Dockerfile, conf/, tools/)
+├── secrets/
+│   ├── db_root_password.txt (gitignored)
+│   ├── db_password.txt (gitignored)
+│   ├── wp_admin_password.txt (gitignored)
+│   └── wp_user_password.txt (gitignored)
+└── srcs/
+    ├── docker-compose.yml
+    └── requirements/
+        ├── nginx/     (Dockerfile, conf/, tools/)
+        ├── wordpress/ (Dockerfile, conf/, tools/)
+        └── mariadb/   (Dockerfile, conf/, tools/)
 ```
 
 **Service Flow**: nginx:443 → wordpress:9000 → mariadb:3306
@@ -57,7 +64,7 @@ docker logs -f wordpress            # Follow logs
 docker exec -it nginx bash          # Shell access
 docker exec nginx nginx -t          # Test config
 docker exec wordpress wp --info --allow-root
-docker exec mariadb mysql -uroot -p${MYSQL_ROOT_PASSWORD}
+docker exec mariadb mysql -uroot -p"$(cat secrets/db_root_password.txt)"
 ```
 
 ## Service Details
@@ -88,7 +95,7 @@ docker-compose -f srcs/docker-compose.yml logs
 
 # Test services
 curl -k https://localhost:443
-docker exec wordpress mysqladmin ping -hmariadb -u${MYSQL_USER} -p${MYSQL_PASSWORD}
+docker exec wordpress mysqladmin ping -hmariadb -uwpuser -p"$(cat secrets/db_password.txt)"
 ```
 
 ## Troubleshooting Commands

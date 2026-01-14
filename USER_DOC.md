@@ -15,10 +15,18 @@ Three Docker services provide a complete WordPress hosting stack:
    # Add: 127.0.0.1 mwojtcza.42.fr
    ```
 
-2. Configure environment:
+2. Configure secrets:
    ```bash
-   cp srcs/.env.example srcs/.env
-   nano srcs/.env  # Add your passwords
+   cd secrets
+   cp db_root_password.txt.example db_root_password.txt
+   cp db_password.txt.example db_password.txt
+   cp wp_admin_password.txt.example wp_admin_password.txt
+   cp wp_user_password.txt.example wp_user_password.txt
+   # Edit each file with strong passwords
+   nano db_root_password.txt
+   nano db_password.txt
+   nano wp_admin_password.txt
+   nano wp_user_password.txt
    ```
 
 ## Starting and Stopping
@@ -35,20 +43,20 @@ make logs      # View logs
 
 - **Website**: https://mwojtcza.42.fr
 - **Admin Panel**: https://mwojtcza.42.fr/wp-admin
-- **Admin User**: mwojtcza (see `.env` for password)
-- **Regular User**: user (see `.env` for password)
+- **Admin User**: mwojtcza (see `secrets/wp_admin_password.txt`)
+- **Regular User**: user (see `secrets/wp_user_password.txt`)
 
 *Accept the self-signed SSL certificate warning in your browser.*
 
 ## Credentials
 
-All credentials are in `srcs/.env`:
-- `WORDPRESS_ADMIN_PASSWORD` - Admin access
-- `WORDPRESS_USER_PASSWORD` - Regular user
-- `MYSQL_ROOT_PASSWORD` - Database root
-- `MYSQL_PASSWORD` - WordPress database user
+All credentials are stored in `secrets/` directory:
+- `wp_admin_password.txt` - Admin access
+- `wp_user_password.txt` - Regular user
+- `db_root_password.txt` - Database root
+- `db_password.txt` - WordPress database user
 
-**Security**: Never commit `.env` to git. Use `chmod 600 srcs/.env` to restrict access.
+**Security**: Never commit `secrets/*.txt` files to git. Use `chmod 600 secrets/*.txt` to restrict access.
 
 ## Checking Services
 

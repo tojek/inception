@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Read secrets
+MYSQL_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
+MYSQL_PASSWORD=$(cat /run/secrets/db_password)
+
 # Ensure required directories exist
 mkdir -p /run/mysqld /var/log/mysql
 chown -R mysql:mysql /run/mysqld /var/log/mysql
