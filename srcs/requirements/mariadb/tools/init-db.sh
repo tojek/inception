@@ -15,9 +15,17 @@ if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]; then
     pid="$!"
 
     echo "Waiting for MariaDB to start..."
-    while ! mysqladmin ping --silent; do
+    for i in {30..0}; do
+        if mysqladmin ping --socket=/run/mysqld/mysqld.sock --silent; then
+            break
+        fi
         sleep 1
     done
+
+    if [ "$i" = 0 ]; then
+        echo "ERROR: MariaDB failed to start"
+        exit 1
+    fi
 
     echo "Setting up database and users..."
     mysql -u root <<-EOSQL
