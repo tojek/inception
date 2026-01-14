@@ -9,5 +9,8 @@ if [ ! -f /etc/nginx/ssl/nginx.crt ]; then
         -subj "/C=PL/ST=Warsaw/L=Warsaw/O=42/OU=42/CN=${DOMAIN_NAME}"
 fi
 
+echo "Substituting environment variables in nginx config..."
+sed -i "s|\${DOMAIN_NAME}|${DOMAIN_NAME}|g" /etc/nginx/nginx.conf
+
 echo "Starting Nginx..."
 exec nginx -g "daemon off;"
