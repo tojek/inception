@@ -14,6 +14,7 @@ up:
 	@docker-compose -f srcs/docker-compose.yml up -d
 
 build:
+	@sudo sed -i '1s/.*/127.0.0.1\tmwojtcza.42.fr/' /etc/hosts
 	@mkdir -p /home/$(USER)/data/wordpress
 	@mkdir -p /home/$(USER)/data/mariadb
 	@docker-compose -f srcs/docker-compose.yml build
@@ -35,6 +36,7 @@ clean: down
 	@docker volume rm -f srcs_mariadb srcs_wordpress 2>/dev/null || true
 
 fclean: clean
+	@sudo sed -i '1s/.*/127.0.0.1\tlocalhost/' /etc/hosts
 	@sudo rm -rf /home/$(USER)/data/wordpress
 	@sudo rm -rf /home/$(USER)/data/mariadb
 	@docker volume prune -f
